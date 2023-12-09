@@ -13,14 +13,15 @@ import { CodeComputer } from '@icon-park/react'
 import TabBar from '../../components/TabBar.tsx'
 import GameCard from '../../components/GameCard.tsx'
 import { serverUrl } from '../../data/constants.tsx'
-import { GameInfo, getProjectsDTO } from '../../data/types'
+import { GameInfo, ProjectInfo, getProjectsDTO } from '../../data/types'
 import exampleGames from '../../data/exampleGames.json'
 import axios from 'axios'
 import { Window } from '../../components/Window.tsx'
+import { Axios } from '../../tool/tool.tsx'
 
 const Games = () => {
 	const [isLoaded, setIsLoaded] = useState(false)
-	const [games, setGames] = useState<getProjectsDTO>()
+	const [games, setGames] = useState<ProjectInfo[]>()
 	const [gameSelected, setGameSelected] = useState<GameInfo>()
 	const { Title } = Typography
 
@@ -67,11 +68,14 @@ const Games = () => {
 
 	useEffect(() => {
 		setGames(exampleGames)
-		setIsLoaded(true)
-		// axios.get<getProjectsDTO>(serverUrl + '/getProjects').then((res) => {
-		//   setGames(res.data);
-		//   setIsLoaded(true);
-		// })
+		Axios.get<getProjectsDTO>('/getProjects')
+			.then(res => {
+				setGames(res.data.data)
+				setIsLoaded(true)
+			})
+			.then(() => {
+				setIsLoaded(true)
+			})
 	}, [])
 
 	return (

@@ -51,4 +51,35 @@ export interface ProjectInfo {
 /**
  * 获取项目列表的DTO
  */
-export type getProjectsDTO = ProjectInfo[]
+export type getProjectsDTO = {
+	/**
+	 * 状态码
+	 */
+	code: number
+	/**
+	 * 项目列表
+	 */
+	data: ProjectInfo[]
+	/**
+	 * 信息
+	 */
+	msg: string
+}
+
+/**
+ * 获取排行榜的DTO
+ */
+export type getRankDTO = {
+	/**
+	 * 状态码
+	 */
+	code: number
+	/**
+	 * 项目列表
+	 */
+	data: UserOnRank[]
+	/**
+	 * 信息
+	 */
+	msg: string
+}

@@ -3,7 +3,7 @@ import TabBar from '../../components/TabBar.tsx'
 import { List, Button, Spin, Space } from '@douyinfe/semi-ui'
 import InfiniteScroll from 'react-infinite-scroller'
 import { useEffect, useState } from 'react'
-import { UserOnRank } from '../../data/types.tsx'
+import { UserOnRank, getRankDTO } from '../../data/types.tsx'
 import { Axios } from '../../tool/tool.tsx'
 import exampleRank from '../../data/exampleRank.json'
 import { Trophy } from '@icon-park/react'
@@ -13,14 +13,25 @@ function Rank() {
 	const [loading, setLoading] = useState(false)
 	const [hasMore, setHasMore] = useState(true)
 	const [showLoadMore, setShowLoadMore] = useState(false)
-	const [fullData, setFullRank] = useState<UserOnRank[]>([...exampleRank])
+	const [fullData, setFullData] = useState<UserOnRank[]>([...exampleRank])
 	const [dataSource, setDataSource] = useState<UserOnRank[]>([])
-	//获取浏览器高度
-    const height = window.innerHeight
+
+	useEffect(() => {
+		setLoading(true)
+		Axios.get<getRankDTO>('/leaderboard')
+			.then(res => {
+				setFullData(res.data.data)
+			})
+			.then(() => {
+				setLoading(false)
+				setShowLoadMore(true)
+			})
+	}, [])
 
 	const fetchData = async () => {
 		setLoading(true)
 		setTimeout(() => {
+			console.log(fullData)
 			const data = fullData.slice(0, dataSource.length + 10)
 			setDataSource(data)
 			setLoading(false)
